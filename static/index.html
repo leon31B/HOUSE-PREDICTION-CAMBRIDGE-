@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>California Housing Valuation AI | Machine Learning GUI</title>
+    <meta name="description" content="Interactive AI GUI for predicting California median house values using Scikit-Learn HistGradientBoosting Pipeline trained on California Housing data.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet.js for Interactive California Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Custom CSS (Neo-Brutalism UI Design) -->
+    <link rel="stylesheet" href="css/style.css?v=neobrutal">
+</head>
+<body>
+    <div class="ambient-glow ambient-1"></div>
+    <div class="ambient-glow ambient-2"></div>
+    <div class="ambient-glow ambient-3"></div>
+
+    <div class="app-container">
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="brand-group">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="brand-title">California Housing Price Predictor</h1>
+                    <p class="brand-subtitle">Powered by Scikit-Learn HistGradientBoosting Pipeline (<code class="code-pill">house_predict_model.ipynb</code>)</p>
+                </div>
+            </div>
+
+            <div class="header-badges">
+                <div class="palette-badge" title="Theme: Jade pebble morning (#7B9669, #E6E6E6, #404E3B, #6C8480, #BAC8B1)">
+                    <span class="palette-name">Jade pebble morning</span>
+                    <div class="palette-swatches">
+                        <span class="swatch" style="background: #7B9669;" title="#7B9669 (Jade)"></span>
+                        <span class="swatch" style="background: #E6E6E6;" title="#E6E6E6 (Pebble)"></span>
+                        <span class="swatch" style="background: #404E3B;" title="#404E3B (Forest)"></span>
+                        <span class="swatch" style="background: #6C8480;" title="#6C8480 (Slate)"></span>
+                        <span class="swatch" style="background: #BAC8B1;" title="#BAC8B1 (Sage)"></span>
+                    </div>
+                </div>
+                <div class="status-indicator" id="connection-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text" id="status-label">Connecting ML Engine...</span>
+                </div>
+                <button type="button" class="btn-secondary btn-sm" id="btn-load-notebook-sample" title="Load sample from Notebook Cell 50">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Load Notebook Sample
+                </button>
+            </div>
+        </header>
+
+        <!-- Presets Bar -->
+        <section class="presets-section">
+            <span class="presets-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                Quick Presets:
+            </span>
+            <div class="preset-buttons">
+                <button type="button" class="preset-btn active" data-preset="bay_area">
+                    <span class="preset-emoji">🌉</span> SF Bay Area Villa
+                </button>
+                <button type="button" class="preset-btn" data-preset="santa_monica">
+                    <span class="preset-emoji">🏖️</span> Santa Monica Beach
+                </button>
+                <button type="button" class="preset-btn" data-preset="san_diego">
+                    <span class="preset-emoji">🏙️</span> San Diego Coastal
+                </button>
+                <button type="button" class="preset-btn" data-preset="sacramento">
+                    <span class="preset-emoji">🌲</span> Sacramento Suburban
+                </button>
+                <button type="button" class="preset-btn" data-preset="fresno">
+                    <span class="preset-emoji">🌾</span> Central Valley Inland
+                </button>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <main class="main-grid">
+            <!-- Left Column: Form & Map Inputs -->
+            <div class="card form-card">
+                <form id="prediction-form" autocomplete="off">
+                    <!-- Section: Location & Map -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <span class="section-num">01</span>
+                            <div>
+                                <h2 class="section-title">Geographic Coordinates & Proximity</h2>
+                                <p class="section-desc">Click anywhere on the California map or adjust coordinates manually.</p>
+                            </div>
+                        </div>
+
+                        <!-- Mini Leaflet Map -->
+                        <div class="map-wrapper">
+                            <div id="ca-map"></div>
+                            <div class="map-hint">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                Click on the map to place the location pin anywhere in California.
+                            </div>
+                        </div>
+
+                        <div class="input-row-2">
+                            <div class="input-group">
+                                <label for="longitude" class="input-label">
+                                    Longitude (°W)
+                                    <span class="range-hint">[-124.35 to -114.31]</span>
+                                </label>
+                                <div class="input-with-icon">
+                                    <input type="number" id="longitude" name="longitude" step="0.001" min="-125" max="-113" value="-122.230" required>
+                                    <span class="input-suffix">°</span>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="latitude" class="input-label">
+                                    Latitude (°N)
+                                    <span class="range-hint">[32.54 to 41.95]</span>
+                                </label>
+                                <div class="input-with-icon">
+                                    <input type="number" id="latitude" name="latitude" step="0.001" min="32" max="43" value="37.880" required>
+                                    <span class="input-suffix">°</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ocean Proximity Chips -->
+                        <div class="input-group">
+                            <label class="input-label">Ocean Proximity Category</label>
+                            <div class="chip-group" id="ocean-proximity-chips">
+                                <label class="chip-item">
+                                    <input type="radio" name="ocean_proximity" value="NEAR BAY" checked>
+                                    <span class="chip-box">NEAR BAY</span>
+                                </label>
+                                <label class="chip-item">
+                                    <input type="radio" name="ocean_proximity" value="<1H OCEAN">
+                                    <span class="chip-box">&lt;1H OCEAN</span>
+                                </label>
+                                <label class="chip-item">
+                                    <input type="radio" name="ocean_proximity" value="NEAR OCEAN">
+                                    <span class="chip-box">NEAR OCEAN</span>
+                                </label>
+                                <label class="chip-item">
+                                    <input type="radio" name="ocean_proximity" value="INLAND">
+                                    <span class="chip-box">INLAND</span>
+                                </label>
+                                <label class="chip-item">
+                                    <input type="radio" name="ocean_proximity" value="ISLAND">
+                                    <span class="chip-box">ISLAND</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Income & Socioeconomics -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <span class="section-num">02</span>
+                            <div>
+                                <h2 class="section-title">Income & Demographics</h2>
+                                <p class="section-desc">Key economic factors influencing the housing block group.</p>
+                            </div>
+                        </div>
+
+                        <!-- Median Income Slider -->
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <label for="median_income" class="input-label">
+                                    Median Income (x $10,000 USD)
+                                </label>
+                                <div class="slider-badge">
+                                    <span id="median-income-val" class="badge-value">8.32</span>
+                                    <span id="median-income-salary" class="badge-subtext">($83,200 / yr)</span>
+                                </div>
+                            </div>
+                            <input type="range" id="median_income_slider" min="0.5" max="15.0" step="0.05" value="8.32" class="custom-range">
+                            <input type="hidden" id="median_income" name="median_income" value="8.32">
+                        </div>
+
+                        <div class="input-row-2">
+                            <div class="input-group">
+                                <label for="population" class="input-label">
+                                    Block Group Population
+                                    <span class="range-hint">Total residents</span>
+                                </label>
+                                <input type="number" id="population" name="population" min="1" max="50000" step="1" value="322" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="households" class="input-label">
+                                    Total Households
+                                    <span class="range-hint">Occupied units</span>
+                                </label>
+                                <input type="number" id="households" name="households" min="1" max="10000" step="1" value="126" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Housing & Physical Characteristics -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <span class="section-num">03</span>
+                            <div>
+                                <h2 class="section-title">Property Architecture & Age</h2>
+                                <p class="section-desc">Total rooms, bedrooms, and age of the structures.</p>
+                            </div>
+                        </div>
+
+                        <!-- Median Age Slider -->
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <label for="housing_median_age" class="input-label">
+                                    Median Housing Age
+                                </label>
+                                <div class="slider-badge">
+                                    <span id="housing-age-val" class="badge-value">41</span>
+                                    <span class="badge-subtext">Years</span>
+                                </div>
+                            </div>
+                            <input type="range" id="housing_median_age_slider" min="1" max="52" step="1" value="41" class="custom-range">
+                            <input type="hidden" id="housing_median_age" name="housing_median_age" value="41">
+                        </div>
+
+                        <div class="input-row-2">
+                            <div class="input-group">
+                                <label for="total_rooms" class="input-label">
+                                    Total Rooms in Block
+                                    <span class="range-hint">Sum of all rooms</span>
+                                </label>
+                                <input type="number" id="total_rooms" name="total_rooms" min="1" max="40000" step="1" value="880" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="total_bedrooms" class="input-label">
+                                    Total Bedrooms in Block
+                                    <span class="range-hint">Pipeline auto-imputes if empty</span>
+                                </label>
+                                <input type="number" id="total_bedrooms" name="total_bedrooms" min="1" max="10000" step="1" value="129">
+                            </div>
+                        </div>
+
+                        <!-- Live Derived Metrics -->
+                        <div class="derived-stats-box">
+                            <div class="stat-pill">
+                                <span class="stat-label">Rooms / Household:</span>
+                                <span class="stat-val" id="stat-rph">6.98</span>
+                            </div>
+                            <div class="stat-pill">
+                                <span class="stat-label">Bedrooms / Room:</span>
+                                <span class="stat-val" id="stat-bpr">0.147</span>
+                            </div>
+                            <div class="stat-pill">
+                                <span class="stat-label">Avg Household Size:</span>
+                                <span class="stat-val" id="stat-pph">2.56</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Action Buttons -->
+                    <div class="form-actions">
+                        <button type="submit" id="btn-predict" class="btn-primary">
+                            <span class="btn-spinner" id="btn-spinner"></span>
+                            <span class="btn-text">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                                Predict Median House Value
+                            </span>
+                        </button>
+                        <button type="button" id="btn-reset" class="btn-secondary">Reset</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Prediction Output & Model Insights -->
+            <div class="results-column">
+                <!-- Result Hero Card -->
+                <div class="card result-card" id="result-card">
+                    <div class="result-header">
+                        <span class="result-badge">AI Valuation Output</span>
+                        <span class="market-pill" id="market-tier-badge">Luxury Market</span>
+                    </div>
+
+                    <div class="price-display-wrapper">
+                        <div class="price-currency">$</div>
+                        <div class="price-amount" id="price-display">443,311</div>
+                    </div>
+                    <p class="price-sub">Estimated Median House Value for this block group</p>
+
+                    <!-- California State Benchmark Comparison -->
+                    <div class="benchmark-container">
+                        <div class="benchmark-header">
+                            <span>vs. California State Median ($179,700)</span>
+                            <span id="benchmark-pct" class="benchmark-diff positive">+146.7% Above</span>
+                        </div>
+                        <div class="benchmark-track">
+                            <div class="benchmark-bar" id="benchmark-bar" style="width: 88.6%;"></div>
+                            <div class="benchmark-marker" style="left: 36%;" title="California Median: $179,700"></div>
+                        </div>
+                        <div class="benchmark-labels">
+                            <span>$15k (Min)</span>
+                            <span class="ca-median-label">CA Median ($180k)</span>
+                            <span>$500k+ (Max)</span>
+                        </div>
+                    </div>
+
+                    <!-- Valuation Summary Insights -->
+                    <div class="insights-grid">
+                        <div class="insight-item">
+                            <span class="insight-title">Primary Driver</span>
+                            <span class="insight-value" id="insight-primary">High Median Income ($83k)</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-title">Location Tier</span>
+                            <span class="insight-value" id="insight-location">Prime Bay Area Coast</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-title">Inference Speed</span>
+                            <span class="insight-value" id="insight-latency">~3 ms</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-title">Pipeline Integrity</span>
+                            <span class="insight-value text-emerald">Preprocessed & Scaled</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Architecture Card -->
+                <div class="card info-card">
+                    <h3 class="info-card-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Model Pipeline Specifications
+                    </h3>
+                    <div class="specs-table">
+                        <div class="spec-row">
+                            <span class="spec-key">Algorithm</span>
+                            <span class="spec-val">HistGradientBoostingRegressor</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-key">Hyperparameters</span>
+                            <span class="spec-val">lr=0.1, l2=0.1, leaf_nodes=63</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-key">Numeric Preprocessing</span>
+                            <span class="spec-val">Median Imputer + StandardScaler</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-key">Categorical Preprocessing</span>
+                            <span class="spec-val">Frequent Imputer + OneHotEncoder</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-key">Source Notebook</span>
+                            <span class="spec-val"><code>house_predict_model.ipynb</code></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notebook Cell 50 Verification Badge -->
+                <div class="card verification-card">
+                    <div class="verif-icon">✅</div>
+                    <div class="verif-content">
+                        <h4>Notebook Cell 50 Validated</h4>
+                        <p>Default inputs mirror Cell 50 from <code>house_predict_model.ipynb</code> yielding an exact match of <strong>$443,310.96</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>California Housing Machine Learning GUI • Built with HTML5, CSS3, Vanilla JS & Flask Pipeline</p>
+        </footer>
+    </div>
+
+    <!-- Application Logic -->
+    <script src="js/app.js?v=neobrutal"></script>
+</body>
+</html>

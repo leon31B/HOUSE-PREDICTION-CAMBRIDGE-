@@ -1,0 +1,1011 @@
+/* ==========================================================================
+   California Housing ML GUI - Authentic Neo-Brutalism Design System
+   Key Neo-Brutalist Traits:
+     - Chunky 3px solid dark borders (#1A2417)
+     - Hard offset drop shadows (5px 5px, 8px 8px, NO blur)
+     - Rounded geometric shapes (border-radius: 10px - 14px)
+     - Expressive color blocking using "Jade pebble morning" palette:
+         #7B9669: High-energy Jade Green (Hero Actions, Active Pills, Highlights)
+         #BAC8B1: Soft Sage Tint (Cards, Badges, Secondary Highlights)
+         #E6E6E6: Pebble Gray (Neutral Blocks, Divider Accents)
+         #6C8480: Slate Teal (Secondary Tags, Map Overlays)
+         #404E3B / #1A2417: Neo-Brutalist Ink (Borders, Hard Shadows, Headings)
+     - Playful sticker tags with subtle rotations & tactile spring clicks
+   ========================================================================== */
+
+:root {
+    /* Exact Palette Tokens */
+    --color-jade: #7B9669;
+    --color-pebble: #E6E6E6;
+    --color-forest: #404E3B;
+    --color-slate: #6C8480;
+    --color-sage: #BAC8B1;
+
+    /* Neo-Brutalist Ink & Shadows */
+    --neo-ink: #182215;
+    --neo-border: 3px solid var(--neo-ink);
+    --neo-border-thick: 3.5px solid var(--neo-ink);
+    --neo-border-sm: 2px solid var(--neo-ink);
+
+    --neo-shadow-sm: 3px 3px 0px var(--neo-ink);
+    --neo-shadow: 5px 5px 0px var(--neo-ink);
+    --neo-shadow-lg: 8px 8px 0px var(--neo-ink);
+    --neo-shadow-hover: 7px 7px 0px var(--neo-ink);
+
+    /* Surfaces */
+    --bg-main: #F7FAF5;
+    --bg-card: #FFFFFF;
+    --bg-card-alt: #F1F5EE;
+    --bg-input: #FFFFFF;
+
+    --text-primary: #141C11;
+    --text-secondary: #2C3927;
+    --text-muted: #576753;
+
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Neo-Brutalist Chunky Curvature */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-main);
+    /* Neo-Brutalist subtle grid / dot texture */
+    background-image: 
+        radial-gradient(var(--color-sage) 1.5px, transparent 1.5px),
+        linear-gradient(to right, rgba(186, 200, 177, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(186, 200, 177, 0.15) 1px, transparent 1px);
+    background-size: 24px 24px, 48px 48px, 48px 48px;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+}
+
+.ambient-glow {
+    display: none;
+}
+
+/* App Container */
+.app-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 24px 24px 60px;
+    position: relative;
+    z-index: 1;
+}
+
+/* App Header - Chunky Neo-Brutalist Bar */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    background: #FFFFFF;
+    border: var(--neo-border-thick);
+    box-shadow: var(--neo-shadow-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.brand-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    background: var(--color-jade);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    flex-shrink: 0;
+}
+
+.brand-title {
+    font-size: 1.65rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--neo-ink);
+    text-transform: uppercase;
+}
+
+.brand-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.code-pill {
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+    background: var(--color-sage);
+    border: 2px solid var(--neo-ink);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    color: var(--neo-ink);
+    font-weight: 800;
+}
+
+.header-badges {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Neo-Brutalist Palette Badge */
+.palette-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+}
+
+.palette-name {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--neo-ink);
+    text-transform: uppercase;
+}
+
+.palette-swatches {
+    display: flex;
+    gap: 4px;
+}
+
+.swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid var(--neo-ink);
+    display: inline-block;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-sage);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+    color: var(--neo-ink);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--color-jade);
+    border: 2px solid var(--neo-ink);
+    animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+}
+
+/* Presets Bar - Playful Neo-Brutalist Pill Stickers */
+.presets-section {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding: 16px 22px;
+    background: #FFFFFF;
+    border: var(--neo-border-thick);
+    box-shadow: var(--neo-shadow);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+}
+
+.presets-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    font-weight: 900;
+    color: var(--neo-ink);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.preset-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.preset-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    color: var(--neo-ink);
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+}
+
+.preset-btn:hover {
+    background: var(--bg-card-alt);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px var(--neo-ink);
+}
+
+.preset-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px var(--neo-ink);
+}
+
+.preset-btn.active {
+    background: var(--color-jade);
+    color: #FFFFFF;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0px var(--neo-ink);
+}
+
+/* Main Grid Layout */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card Styling - Chunky White Neo-Brutalist Surfaces */
+.card {
+    background: var(--bg-card);
+    border: var(--neo-border-thick);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--neo-shadow-lg);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Form Styles */
+.form-section {
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 2.5px dashed var(--neo-ink);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.section-num {
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    font-weight: 900;
+    color: var(--neo-ink);
+    background: var(--color-sage);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--neo-ink);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+
+.section-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* Map Wrapper */
+.map-wrapper {
+    margin-bottom: 20px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow);
+    background: #FFFFFF;
+}
+
+#ca-map {
+    height: 220px;
+    width: 100%;
+}
+
+.map-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+    color: var(--neo-ink);
+    padding: 9px 14px;
+    background: var(--color-sage);
+    border-top: var(--neo-border);
+    font-weight: 700;
+}
+
+/* Form Inputs */
+.input-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+@media (max-width: 600px) {
+    .input-row-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input-label {
+    font-size: 0.825rem;
+    font-weight: 900;
+    color: var(--neo-ink);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.range-hint {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-slate);
+    text-transform: none;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+input[type="number"], select {
+    width: 100%;
+    background: #FFFFFF;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    border-radius: var(--radius-sm);
+    color: var(--neo-ink);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 800;
+    padding: 11px 14px;
+    outline: none;
+    transition: all 0.15s ease;
+}
+
+input[type="number"]:focus, select:focus {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0px var(--color-jade);
+    background: #FAFCF8;
+}
+
+.input-suffix {
+    position: absolute;
+    right: 14px;
+    color: var(--neo-ink);
+    font-family: var(--font-mono);
+    font-weight: 900;
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+/* Ocean Proximity Chips - Neo-Brutalist Radio Cards */
+.chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.chip-item {
+    cursor: pointer;
+}
+
+.chip-item input[type="radio"] {
+    display: none;
+}
+
+.chip-box {
+    display: inline-block;
+    padding: 9px 16px;
+    background: #FFFFFF;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--neo-ink);
+    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    user-select: none;
+}
+
+.chip-item:hover .chip-box {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px var(--neo-ink);
+    background: var(--bg-card-alt);
+}
+
+.chip-item input[type="radio"]:checked + .chip-box {
+    background: var(--color-jade);
+    color: #FFFFFF;
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px var(--neo-ink);
+}
+
+/* Custom Sliders - Chunky Neo-Brutalist Track & Thumb */
+.slider-group {
+    margin-bottom: 22px;
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.slider-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-sage);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+}
+
+.badge-value {
+    font-family: var(--font-mono);
+    font-weight: 900;
+    font-size: 0.925rem;
+    color: var(--neo-ink);
+}
+
+.badge-subtext {
+    font-size: 0.775rem;
+    color: var(--neo-ink);
+    font-weight: 700;
+}
+
+.custom-range {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 14px;
+    border-radius: var(--radius-full);
+    background: #FFFFFF;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    outline: none;
+}
+
+.custom-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--color-jade);
+    border: var(--neo-border);
+    box-shadow: 2px 2px 0px var(--neo-ink);
+    cursor: pointer;
+    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.custom-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.custom-range::-webkit-slider-thumb:active {
+    background: var(--neo-ink);
+}
+
+/* Derived Stats Box */
+.derived-stats-box {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    background: var(--color-pebble);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 16px;
+    border-radius: var(--radius-md);
+}
+
+@media (max-width: 600px) {
+    .derived-stats-box {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stat-pill {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: #FFFFFF;
+    border: 2px solid var(--neo-ink);
+    box-shadow: 2px 2px 0px var(--neo-ink);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+}
+
+.stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.stat-val {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--neo-ink);
+}
+
+/* Form Action Buttons */
+.form-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.btn-primary {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: var(--color-jade);
+    color: #FFFFFF;
+    border: var(--neo-border-thick);
+    box-shadow: var(--neo-shadow-lg);
+    border-radius: var(--radius-md);
+    padding: 16px 26px;
+    font-size: 1.05rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-primary:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 10px 10px 0px var(--neo-ink);
+    background: #6F895E;
+}
+
+.btn-primary:active {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0px var(--neo-ink);
+}
+
+.btn-secondary {
+    background: #FFFFFF;
+    border: var(--neo-border-thick);
+    box-shadow: var(--neo-shadow);
+    color: var(--neo-ink);
+    padding: 16px 24px;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-card-alt);
+    transform: translate(-2px, -2px);
+    box-shadow: var(--neo-shadow-lg);
+}
+
+.btn-secondary:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--neo-shadow-sm);
+}
+
+.btn-sm {
+    padding: 7px 16px;
+    font-size: 0.775rem;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+}
+
+.btn-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Results Column */
+.results-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: sticky;
+    top: 24px;
+}
+
+/* Result Card - Chunky High-Contrast Neo-Brutalist Box */
+.result-card {
+    background: #FFFFFF;
+    border: var(--neo-border-thick);
+    box-shadow: var(--neo-shadow-lg);
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.result-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--color-pebble);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--neo-ink);
+}
+
+.market-pill {
+    padding: 5px 16px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    background: var(--color-sage);
+    color: var(--neo-ink);
+}
+
+.market-pill.luxury {
+    background: #FEF08A;
+    color: var(--neo-ink);
+}
+
+.market-pill.high {
+    background: var(--color-sage);
+    color: var(--neo-ink);
+}
+
+.market-pill.moderate {
+    background: #BAE6FD;
+    color: var(--neo-ink);
+}
+
+.market-pill.affordable {
+    background: var(--color-pebble);
+    color: var(--neo-ink);
+}
+
+.price-display-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 8px;
+    background: var(--bg-card-alt);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow);
+    padding: 16px 22px;
+    border-radius: var(--radius-md);
+}
+
+.price-currency {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--color-jade);
+}
+
+.price-amount {
+    font-size: 3.6rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    font-family: var(--font-sans);
+    color: var(--neo-ink);
+    line-height: 1;
+}
+
+.price-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 14px;
+    margin-bottom: 22px;
+    font-weight: 700;
+}
+
+/* California State Benchmark Bar */
+.benchmark-container {
+    background: var(--color-pebble);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    margin-bottom: 22px;
+}
+
+.benchmark-header {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--neo-ink);
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.benchmark-diff.positive {
+    background: var(--color-jade);
+    color: #FFFFFF;
+    border: 2px solid var(--neo-ink);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.benchmark-diff.negative {
+    background: #F87171;
+    color: #FFFFFF;
+    border: 2px solid var(--neo-ink);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.benchmark-track {
+    height: 16px;
+    background: #FFFFFF;
+    border: var(--neo-border);
+    border-radius: var(--radius-full);
+    position: relative;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.benchmark-bar {
+    height: 100%;
+    background: var(--color-jade);
+    border-right: var(--neo-border);
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.benchmark-marker {
+    display: none;
+}
+
+.benchmark-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.725rem;
+    color: var(--neo-ink);
+    font-weight: 800;
+}
+
+.ca-median-label {
+    color: var(--neo-ink);
+}
+
+/* Insights Grid */
+.insights-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.insight-item {
+    background: #FFFFFF;
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.insight-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.insight-value {
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--neo-ink);
+}
+
+.text-emerald {
+    color: var(--color-jade) !important;
+}
+
+/* Specs Card */
+.info-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    color: var(--neo-ink);
+}
+
+.specs-table {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg-card-alt);
+    border: 2px solid var(--neo-ink);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+}
+
+.spec-key {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.spec-val {
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    color: var(--neo-ink);
+    font-weight: 900;
+}
+
+/* Verification Card - Chunky Sticker Style */
+.verification-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--color-sage);
+    border: var(--neo-border-thick);
+    box-shadow: var(--neo-shadow);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    transform: rotate(-0.5deg);
+    transition: transform 0.2s ease;
+}
+
+.verification-card:hover {
+    transform: rotate(0deg) scale(1.01);
+}
+
+.verif-icon {
+    font-size: 1.8rem;
+}
+
+.verif-content h4 {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: var(--neo-ink);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.verif-content p {
+    font-size: 0.825rem;
+    color: var(--neo-ink);
+    line-height: 1.5;
+    font-weight: 700;
+}
+
+/* App Footer */
+.app-footer {
+    text-align: center;
+    padding-top: 40px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-size: 0.825rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
